@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/users.schema';
-import { Model } from 'mongoose';
+import { Model, SchemaTypes } from 'mongoose';
 import { CreatePersonDto } from './dto/create-users.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>
+  ) {}
 
   async getAll(): Promise<User[]> {
     return await this.userModel.find();
@@ -29,25 +31,13 @@ export class UsersService {
   async remove(id: string): Promise<User> {
     return await this.userModel.findByIdAndDelete(id);
   }
-}
 
-/* @Injectable()
-export class UsersService {
-  private readonly users = [
-    {
-      id: '123',
-      username: 'muhammet uçar',
-      age: '27',
-    },
-    {
-      id: '124',
-      username: 'ece bayramer',
-      age: '23',
-    },
-  ];
-
-  findAll() {
-    return this.users;
+  async addFavorite(id: string, faqId: string)
+  {
+    const user = await this.userModel.findById(id);
+    user.userFavoriteFaqs.push(faqId as any);
+    return await user.save();
   }
 }
- */
+
+

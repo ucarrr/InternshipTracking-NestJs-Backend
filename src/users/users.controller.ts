@@ -30,5 +30,12 @@ export class UsersController {
   @Delete(':id')
   remove(@Param("id") id): Promise<User>{
     return this.userService.remove(id);
-  } 
+  }
+
+  @Post(':id/favorites/:faqId')
+  addFavorite(@Param('id') id: string, @Param('faqId') faqId: string): Promise<any> {
+    console.log('id', id);
+    console.log('faqId', faqId);
+    return this.userService.addFavorite(id, faqId);
+  }
 }

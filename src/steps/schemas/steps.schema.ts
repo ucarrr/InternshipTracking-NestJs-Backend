@@ -1,8 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { StepDetailDto } from '../dto/create-steps.dto';
 
 export type StepDocument = HydratedDocument<Step>;
+
+@Schema()
+export class StepDetail {
+    @Prop()
+    priority: number;
+
+    @Prop()
+    title: string;
+
+    @Prop()
+    isCompleted: boolean;
+}
 
 @Schema()
 export class Step {
@@ -13,9 +24,7 @@ export class Step {
     priority: number;
 
     @Prop()
-    stepDetails: StepDetailDto[]; 
-    
-
+    stepDetails: [StepDetail];
 }
 
 export const StepSchema = SchemaFactory.createForClass(Step);

@@ -1,3 +1,4 @@
+import { Faq  } from '../../faq/schemas/faq.schema';
 export class CreatePersonDto {
     id: number;
     fullName: string;
