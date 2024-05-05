@@ -1,5 +1,6 @@
 # InternshipTracking-NestJs-Backend --- 
 ## DB--> MongoDB --> Mongoose
+## Authentication --> JWT
 InternshipTracking App NestJs Backend
 
 <p align="center">
