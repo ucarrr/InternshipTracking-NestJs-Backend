@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post ,Put} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post ,Put, UseGuards,  Request,} from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-users.dto';
 import { UsersService } from './users.service';
 import { User } from './schemas/users.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -38,4 +39,12 @@ export class UsersController {
     console.log('faqId', faqId);
     return this.userService.addFavorite(id, faqId);
   }
+
+  @Post(':id/steps/:stepId')
+  addSteps(@Param('id') id: string, @Param('stepId') stepId: string): Promise<any> {
+    console.log('id', id);
+    console.log('stepId', stepId);
+    return this.userService.addSteps(id, stepId);
+  }
+
 }

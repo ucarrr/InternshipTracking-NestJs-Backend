@@ -3,11 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/users.schema';
 import { Model, SchemaTypes } from 'mongoose';
 import { CreatePersonDto } from './dto/create-users.dto';
+import { Step, StepDocument } from 'src/steps/schemas/steps.schema';
+import { IUserIdPayload } from './interfaces';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Step.name) private stepModel: Model<StepDocument>,
   ) {}
 
   async getAll(): Promise<User[]> {
@@ -32,12 +35,20 @@ export class UsersService {
     return await this.userModel.findByIdAndDelete(id);
   }
 
-  async addFavorite(id: string, faqId: string)
-  {
+  async addFavorite(id: string, faqId: string) {
     const user = await this.userModel.findById(id);
     user.userFavoriteFaqs.push(faqId as any);
     return await user.save();
   }
+
+  async addSteps(id: string, stepId: string) {
+    const user = await this.userModel.findById(id);
+    console.log("user: "+ user)
+
+    user.userStepIds.push(stepId as any)
+     
+    console.log('return:');
+
+    return await user.save();
+  }
 }
-
-
