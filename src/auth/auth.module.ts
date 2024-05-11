@@ -6,6 +6,7 @@ import { Token, TokenSchema } from './schemas';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategy';
+import { Step, StepSchema } from 'src/steps/schemas/steps.schema';
 
 
 @Module({
@@ -18,6 +19,10 @@ import { JwtStrategy } from './strategy';
       {
         name: Token.name,
         schema: TokenSchema,
+      },
+      {
+        name: Step.name,
+        schema: StepSchema,
       },
     ]),
     JwtModule.registerAsync({

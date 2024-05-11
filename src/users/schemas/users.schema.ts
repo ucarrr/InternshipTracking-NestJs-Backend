@@ -18,8 +18,8 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ type: [{ type: mongoose.SchemaTypes.ObjectId, ref: Step.name }] })
-  userStepIds: mongoose.Types.ObjectId[];
+  @Prop()
+  steps:[Step]
 
   // Faq şemasına referans
   //@Prop({ type: [{ type: SchemaTypes.ObjectId, ref: Faq.name }] })

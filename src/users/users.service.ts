@@ -45,9 +45,9 @@ export class UsersService {
     const user = await this.userModel.findById(id);
     console.log("user: "+ user)
 
-    user.userStepIds.push(stepId as any)
+    /* user.userStepIds.push(stepId as any) */
      
-    console.log('return:');
+    // console.log('return:');
 
     return await user.save();
   }
