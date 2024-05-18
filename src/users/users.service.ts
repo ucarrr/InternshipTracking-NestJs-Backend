@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/users.schema';
-import { Model, SchemaTypes } from 'mongoose';
+import { Model, ObjectId, SchemaTypes } from 'mongoose';
 import { CreatePersonDto } from './dto/create-users.dto';
 import { Step, StepDocument } from 'src/steps/schemas/steps.schema';
 import { IUserIdPayload } from './interfaces';
@@ -35,13 +35,28 @@ export class UsersService {
     return await this.userModel.findByIdAndDelete(id);
   }
 
-  async addFavorite(id: string, faqId: string) {
-    const user = await this.userModel.findById(id);
+  async addFavoriteFab(userId: ObjectId, faqId: ObjectId): Promise<User> {
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { userFavoriteFaqs: faqId } },
+      { new: true },
+    ).exec();
+  } 
+
+/*   async addFavoriteFab(userId: string, faqId: string): Promise<User> {
+    const user = await this.userModel.findById(userId);
     user.userFavoriteFaqs.push(faqId as any);
     return await user.save();
+  } */
+  async removeFavoriteFab(userId: ObjectId, faqId: ObjectId): Promise<User> {
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      { $pull: { userFavoriteFaqs: faqId } },
+      { new: true },
+    ).exec();
   }
 
-  async addSteps(id: string, stepId: string) {
+  async addSteps(id: string, stepId: string): Promise<User> {
     const user = await this.userModel.findById(id);
     console.log("user: "+ user)
 
