@@ -9,13 +9,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('/api');
 
-  // CORS ayarları
+/*   // CORS ayarları
   app.enableCors({
     origin: '*', // Tüm kaynaklara izin verir. Güvenlik açısından uygun şekilde yapılandırın.
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-
+ */
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(port);
