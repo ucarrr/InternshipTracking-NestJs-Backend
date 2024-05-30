@@ -8,7 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [  MongooseModule.forRoot('mongodb://localhost/internShipApp'),
+  imports: [  MongooseModule.forRoot('mongodb+srv://cseIntern:akdenizece.maho1234@cluster0.wakjnte.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
   ConfigModule.forRoot({
     isGlobal:true
   }),
