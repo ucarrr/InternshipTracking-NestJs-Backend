@@ -8,6 +8,7 @@ import {
   Put,
   UseGuards,
   Request,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-users.dto';
 import { UsersService } from './users.service';
@@ -71,5 +72,36 @@ export class UsersController {
     console.log('id', id);
     console.log('stepId', stepId);
     return this.userService.addSteps(id, stepId);
+  }
+
+ /*  @Put(':id/steps/:stepId')
+  updateUserStepById(
+    @Param('id') id: string,
+    @Param('stepId') stepId: string,
+    @Body() stepData: any
+  ): Promise<User> {
+    return this.userService.updateStepById(id, stepId, stepData);
+  } */
+  @Put(':userId/steps/:stepId/stepDetails/:stepDetailId')
+  async updateStepDetail(
+    @Param('userId') userId: string,
+    @Param('stepId') stepId: string,
+    @Param('stepDetailId') stepDetailId: string,
+    @Body() stepDetailData: any,
+  ) {
+    return this.userService.updateStepDetailById(userId, stepId, stepDetailId, stepDetailData);
+  }
+
+  @Get(':userId/steps/:stepId')
+  async getStep(@Param('userId') userId: string, @Param('stepId') stepId: string) {
+    const user = await this.userService.getOne(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const step = user.steps.find(step => step._id.toString() === stepId);
+    if (!step) {
+      throw new NotFoundException('Step not found');
+    }
+    return step;
   }
 }

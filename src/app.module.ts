@@ -6,7 +6,8 @@ import { FaqModule } from './faq/faq.module';
 import { StepModule } from './steps/step.module'; 
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-
+//'mongodb://localhost/internShipApp'
+//'mongodb+srv://cseIntern:akdenizece.maho1234@cluster0.wakjnte.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 @Module({
   imports: [  MongooseModule.forRoot('mongodb+srv://cseIntern:akdenizece.maho1234@cluster0.wakjnte.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'),
   ConfigModule.forRoot({

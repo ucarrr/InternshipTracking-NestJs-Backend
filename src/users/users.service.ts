@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/users.schema';
 import { Model, ObjectId, SchemaTypes } from 'mongoose';
@@ -66,4 +66,52 @@ export class UsersService {
 
     return await user.save();
   }
+
+  /* async updateStepById(userId: string, stepId: string, stepData: any): Promise<User> {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    console.log(user)
+
+    const stepIndex = user.steps.findIndex(step => step._id.toString() === stepId);
+    if (stepIndex === -1) {
+      throw new NotFoundException('Step not found');
+    }
+
+    user.steps[stepIndex] = { ...user.steps[stepIndex], ...stepData };
+
+    return user.save();
+  } */
+  async updateStepDetailById(userId: string, stepId: string, stepDetailId: string, stepDetailData: any): Promise<User> {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    const stepIndex = user.steps.findIndex(step => step._id.toString() === stepId);
+    if (stepIndex === -1) {
+      throw new NotFoundException('Step not found');
+    }
+  
+    const step = user.steps[stepIndex];
+    const stepDetailIndex = step.stepDetails.findIndex(detail => detail._id.toString() === stepDetailId);
+    if (stepDetailIndex === -1) {
+      throw new NotFoundException('Step detail not found');
+    }
+  
+    Object.assign(step.stepDetails[stepDetailIndex], stepDetailData);
+  
+    // Mark the step and stepDetail as modified
+    user.markModified(`steps.${stepIndex}.stepDetails.${stepDetailIndex}`);
+  
+    await user.save();
+  
+    return user;
+  }
+  
+  
+  
+  
 }
