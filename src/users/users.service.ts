@@ -36,32 +36,36 @@ export class UsersService {
   }
 
   async addFavoriteFab(userId: ObjectId, faqId: ObjectId): Promise<User> {
-    return this.userModel.findByIdAndUpdate(
-      userId,
-      { $addToSet: { userFavoriteFaqs: faqId } },
-      { new: true },
-    ).exec();
-  } 
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $addToSet: { userFavoriteFaqs: faqId } },
+        { new: true },
+      )
+      .exec();
+  }
 
-/*   async addFavoriteFab(userId: string, faqId: string): Promise<User> {
+  /*   async addFavoriteFab(userId: string, faqId: string): Promise<User> {
     const user = await this.userModel.findById(userId);
     user.userFavoriteFaqs.push(faqId as any);
     return await user.save();
   } */
   async removeFavoriteFab(userId: ObjectId, faqId: ObjectId): Promise<User> {
-    return this.userModel.findByIdAndUpdate(
-      userId,
-      { $pull: { userFavoriteFaqs: faqId } },
-      { new: true },
-    ).exec();
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $pull: { userFavoriteFaqs: faqId } },
+        { new: true },
+      )
+      .exec();
   }
 
   async addSteps(id: string, stepId: string): Promise<User> {
     const user = await this.userModel.findById(id);
-    console.log("user: "+ user)
+    console.log('user: ' + user);
 
     /* user.userStepIds.push(stepId as any) */
-     
+
     // console.log('return:');
 
     return await user.save();
@@ -84,34 +88,58 @@ export class UsersService {
 
     return user.save();
   } */
-  async updateStepDetailById(userId: string, stepId: string, stepDetailId: string, stepDetailData: any): Promise<User> {
+  async updateStepDetailById(
+    userId: string,
+    stepId: string,
+    stepDetailId: string,
+    stepDetailData: any,
+  ): Promise<User> {
     const user = await this.userModel.findById(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
-  
-    const stepIndex = user.steps.findIndex(step => step._id.toString() === stepId);
+
+    const stepIndex = user.steps.findIndex(
+      (step) => step._id.toString() === stepId,
+    );
     if (stepIndex === -1) {
       throw new NotFoundException('Step not found');
     }
-  
+
     const step = user.steps[stepIndex];
-    const stepDetailIndex = step.stepDetails.findIndex(detail => detail._id.toString() === stepDetailId);
+    const stepDetailIndex = step.stepDetails.findIndex(
+      (detail) => detail._id.toString() === stepDetailId,
+    );
     if (stepDetailIndex === -1) {
       throw new NotFoundException('Step detail not found');
     }
-  
+
     Object.assign(step.stepDetails[stepDetailIndex], stepDetailData);
-  
+
     // Mark the step and stepDetail as modified
     user.markModified(`steps.${stepIndex}.stepDetails.${stepDetailIndex}`);
-  
+
     await user.save();
-  
+
+    // Update user progress after saving
+    this.updateUserProgress(user);
+    await user.save();
+
     return user;
   }
-  
-  
-  
+
+private updateUserProgress(user: UserDocument) {
+    const totalSteps = user.steps.length;
+    const completedSteps = user.steps.filter(step =>
+        step.stepDetails.every(detail => detail.isCompleted)
+    ).length;
+
+    if (completedSteps === totalSteps) {
+        user.progress = 100;
+    } else {
+        user.progress = Math.floor((completedSteps / totalSteps) * 100);
+    }
+}
+
   
 }

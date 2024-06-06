@@ -19,13 +19,16 @@ export class User {
   password: string;
 
   @Prop()
-  steps:[Step]
+  steps: [Step];
 
   // Faq şemasına referans
   //@Prop({ type: [{ type: SchemaTypes.ObjectId, ref: Faq.name }] })
   //userFavoriteFaqs: Types.ObjectId[];
   @Prop({ type: [{ type: mongoose.SchemaTypes.ObjectId, ref: Faq.name }] })
   userFavoriteFaqs: mongoose.Types.ObjectId[];
+
+  @Prop({ default: 0 })
+  progress: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
