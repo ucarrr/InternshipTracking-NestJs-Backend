@@ -59,7 +59,7 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    const user = await this.userModel.findOne({email});
+    const user = await this.userModel.findOne({ email });
 
     //Kullamıcı Var mı?
     if (!user)
@@ -117,7 +117,7 @@ export class AuthService {
   async userInfo(userId: IJwtPayload) {
     //const user = await this.userModel.findById(userId).select('email');
     const user = await this.userModel.findById(userId);
-    console.log("ME USER"+ user)
+    console.log('ME USER' + user);
     return user;
   }
 }

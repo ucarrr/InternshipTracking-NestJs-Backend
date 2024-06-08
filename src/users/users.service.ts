@@ -128,18 +128,16 @@ export class UsersService {
     return user;
   }
 
-private updateUserProgress(user: UserDocument) {
+  private updateUserProgress(user: UserDocument) {
     const totalSteps = user.steps.length;
-    const completedSteps = user.steps.filter(step =>
-        step.stepDetails.every(detail => detail.isCompleted)
+    const completedSteps = user.steps.filter((step) =>
+      step.stepDetails.every((detail) => detail.isCompleted),
     ).length;
 
     if (completedSteps === totalSteps) {
-        user.progress = 100;
+      user.progress = 100;
     } else {
-        user.progress = Math.floor((completedSteps / totalSteps) * 100);
+      user.progress = Math.floor((completedSteps / totalSteps) * 100);
     }
-}
-
-  
+  }
 }

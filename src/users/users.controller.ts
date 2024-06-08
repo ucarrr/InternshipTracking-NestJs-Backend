@@ -74,7 +74,7 @@ export class UsersController {
     return this.userService.addSteps(id, stepId);
   }
 
- /*  @Put(':id/steps/:stepId')
+  /*  @Put(':id/steps/:stepId')
   updateUserStepById(
     @Param('id') id: string,
     @Param('stepId') stepId: string,
@@ -89,16 +89,24 @@ export class UsersController {
     @Param('stepDetailId') stepDetailId: string,
     @Body() stepDetailData: any,
   ) {
-    return this.userService.updateStepDetailById(userId, stepId, stepDetailId, stepDetailData);
+    return this.userService.updateStepDetailById(
+      userId,
+      stepId,
+      stepDetailId,
+      stepDetailData,
+    );
   }
 
   @Get(':userId/steps/:stepId')
-  async getStep(@Param('userId') userId: string, @Param('stepId') stepId: string) {
+  async getStep(
+    @Param('userId') userId: string,
+    @Param('stepId') stepId: string,
+  ) {
     const user = await this.userService.getOne(userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const step = user.steps.find(step => step._id.toString() === stepId);
+    const step = user.steps.find((step) => step._id.toString() === stepId);
     if (!step) {
       throw new NotFoundException('Step not found');
     }
